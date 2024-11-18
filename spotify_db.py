@@ -12,7 +12,7 @@ class SpotifyDB(_BaseDB):
     FOLDER = ''
     DB_NAME = 'spotify_db.sqlite'
 
-    DATA = 'data/playlist_songs4.csv'
+    DATA = 'data/playlist_songs.csv'
 
     PATH = FOLDER + DATA
 
@@ -97,9 +97,23 @@ class SpotifyDB(_BaseDB):
             );"""
         self.run_action(sql,keep_open=True)
 
+        self._conn.commit()
+        self._close()
+        return
 
-def _get_song_id(self,song_name,duration,year,month):
-    pass
+    def _load_dynamic_data(self, filepath):
+        self._connect()
+        songs = pd.read_csv(filepath, dtype={})
+        for i, row in enumerate(songs.to_dict(orient='tight')):
+            song_name = row['Song Name']
+            duration = row['Duration']
+            year = (songs['date'][i].split(' ')[0]).split('-')[0]
+            month = (songs['date'][i].split(' ')[0]).split('-')[1]
+
+        
+
+    def _get_song_id(self,song_name,duration,year,month):
+        pass
 
 
 
